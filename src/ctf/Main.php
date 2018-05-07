@@ -12,7 +12,7 @@ use pocketmine\nbt\tag\IntTag;
 use pocketmine\command\CommandSender;
 use pocketmine\level\Position;
 use pocketmine\item\Item;
-use pocketmine\network\protocol\PlayerArmorEquipmentPacket;
+use pocketmine\network\mcpe\protocol\PlayerArmorEquipmentPacket;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\event\player\PlayerRespawnEvent;
 use pocketmine\event\entity\EntityDamageEvent;
@@ -308,7 +308,7 @@ Class Main extends PluginBase implements Listener{
             
     }
     
-    public function assignPlayer($player){
+    public function assignPlayer(Player $player){
         
         $name = $player->getName();
         $red = $this->temp["RedPlayers"]; //sends minor error cuz not set yet 
@@ -351,15 +351,16 @@ Class Main extends PluginBase implements Listener{
         }
     }
    
-    public function giveTeamItems($player) { //gives items to $player according to which team he is on
+    public function giveTeamItems(Player $player) { //gives items to $player according to which team they are on
 		$p = $this->getServer()->getPlayer($player);
 		$inv = $p->getInventory();
+	    	$armor = $p->getArmorInventory();
 		$inv->setContents([]);
-		$inv->setArmorItem(0, Item::get(Item::IRON_HELMET));
-		$inv->setArmorItem(1, Item::get(Item::LEATHER_TUNIC));
-		$inv->setArmorItem(2, Item::get(Item::IRON_LEGGINGS));
-		$inv->setArmorItem(3, Item::get(Item::CHAIN_BOOTS));
-		$inv->sendArmorContents($p);
+		$inv->setItem(0, Item::get(Item::IRON_HELMET));
+		$inv->setItem(1, Item::get(Item::LEATHER_TUNIC));
+		$inv->setItem(2, Item::get(Item::IRON_LEGGINGS));
+		$inv->setItem(3, Item::get(Item::CHAIN_BOOTS));
+		$armor->sendContents($p);
 		$inv->addItem(Item::get(Item::STEAK, 0, 5));
 		$inv->addItem(Item::get(Item::STONE_SWORD, 0, 1));
 		$inv->addItem(Item::get(Item::BOW, 0, 1));
